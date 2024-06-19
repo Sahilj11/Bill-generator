@@ -1,13 +1,72 @@
-import { BillItem } from './components/BillItem'
-import { Header } from './components/Header'
+import { BillItem } from "./components/BillItem";
+import { GrandTotal } from "./components/GrandTotal";
+import { Header } from "./components/Header";
 
+import { useState, useReducer } from "react";
+const ACTIONS = {
+    ADD_ITEM: "add-item",
+    ADD_RATE: "add-rate",
+    ADD_QUANTITY: "add-quantity",
+    GET_PRICE: "get-price",
+};
 function App() {
-    return(
+    function reducer(state, action) {
+        switch (action.type) {
+            case ACTIONS.ADD_ITEM:
+                return {
+                    items: [
+                        ...state.items.slice(0, action.payload.index - 1),
+                        {
+                            ...state.items[action.payload.index - 1],
+                            itemDesc: action.payload.itemDesc,
+                        },
+                        ...state.items.slice(action.payload.index),
+                    ],
+                };
+            case ACTIONS.ADD_RATE:
+                return {
+                    items: state.items.map((item, index) =>
+                        index === action.payload.index - 1
+                            ? {
+                                ...item,
+                                rate: action.payload.rate,
+                                price: action.payload.rate * item.quantity,
+                            }
+                            : item,
+                    ),
+                };
+            case ACTIONS.ADD_QUANTITY:
+                return {
+                    items: state.items.map((item, index) =>
+                        index === action.payload.index - 1
+                            ? {
+                                ...item,
+                                quantity: action.payload.quantity,
+                                price:
+                                    Math.round(item.rate * action.payload.quantity * 1000) /
+                                    1000,
+                            }
+                            : item,
+                    ),
+                };
+            default:
+                return state;
+        }
+    }
+    const [items, setItems] = useState([{}]);
+    const [state, dispatch] = useReducer(reducer, { items: [] });
+    return (
         <>
-        <Header/>
-        <BillItem/>
+            <Header />
+            <BillItem
+                items={items}
+                setItems={setItems}
+                state={state}
+                dispatch={dispatch}
+            />
+            <GrandTotal total={state}/>
         </>
-    )
+    );
 }
 
-export default App
+export default App;

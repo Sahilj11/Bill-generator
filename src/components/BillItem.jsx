@@ -1,3 +1,4 @@
+import { GrandTotal } from "./GrandTotal";
 import { Item } from "./Item";
 import { useReducer, useState } from "react";
 
@@ -7,9 +8,8 @@ const ACTIONS = {
     ADD_QUANTITY: "add-quantity",
     GET_PRICE: "get-price",
 };
-export function BillItem() {
-    const [items, setItems] = useState([{}]);
-    const [state, dispatch] = useReducer(reducer, { items: [] });
+export function BillItem({items,dispatch,state,setItems}) {
+    
     function addItem() {
         const item = [...items, {}];
         setItems(item);
@@ -20,9 +20,9 @@ export function BillItem() {
             case ACTIONS.ADD_ITEM:
                 return {
                     items: [
-                        ...state.items.slice(0, action.payload.index-1),
+                        ...state.items.slice(0, action.payload.index - 1),
                         {
-                            ...state.items[action.payload.index-1],
+                            ...state.items[action.payload.index - 1],
                             itemDesc: action.payload.itemDesc,
                         },
                         ...state.items.slice(action.payload.index),
@@ -31,7 +31,7 @@ export function BillItem() {
             case ACTIONS.ADD_RATE:
                 return {
                     items: state.items.map((item, index) =>
-                        index === action.payload.index-1
+                        index === action.payload.index - 1
                             ? {
                                 ...item,
                                 rate: action.payload.rate,
@@ -43,11 +43,13 @@ export function BillItem() {
             case ACTIONS.ADD_QUANTITY:
                 return {
                     items: state.items.map((item, index) =>
-                        index === action.payload.index-1
+                        index === action.payload.index - 1
                             ? {
                                 ...item,
                                 quantity: action.payload.quantity,
-                                price: Math.round(item.rate * action.payload.quantity * 1000)/1000,
+                                price:
+                                    Math.round(item.rate * action.payload.quantity * 1000) /
+                                    1000,
                             }
                             : item,
                     ),
@@ -56,7 +58,7 @@ export function BillItem() {
                 return state;
         }
     }
-    console.log(state)
+    console.log(state);
     return (
         <>
             <div className="flex justify-center">
