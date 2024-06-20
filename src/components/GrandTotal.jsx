@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
+import { Charge } from "./Charge";
 
 export function GrandTotal({ total }) {
     const [gtotal, setTotal] = useState(0);
+    const [charges, setCharges] = useState([{}]);
+    function addCharge() {
+        setCharges([...charges, {}]);
+    }
     useEffect(() => {
         if (total.items.length == 0) {
         } else {
@@ -38,30 +43,18 @@ export function GrandTotal({ total }) {
                         </label>
                     </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-3">
                     <div>
                         SubTotal: <span>{`\u20B9${gtotal}`}</span>
                     </div>
-                    <div className="flex">
-                        <input
-                            type="text"
-                            placeholder="Discount"
-                            className="input w-full max-w-xs"
-                        />
-                        <input
-                            type="number"
-                            placeholder="0"
-                            className="input input-bordered w-full max-w-xs"
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="text"
-                            className="input input-bordered"
-                            placeholder="Daisy"
-                        />
-                        <label className="flex items-center">Name</label>
-                    </div>
+                    <Charge placeholder="Discount"/>
+                    {charges.map((item, index) => {
+                        return <Charge placeholder="Tax" />;
+                    })}
+                    <button className="btn btn-info w-2/3" onClick={addCharge}>
+                        Add more charges like shipping or more tax
+                    </button>
+                    <div>Total</div>
                 </div>
             </div>
         </>

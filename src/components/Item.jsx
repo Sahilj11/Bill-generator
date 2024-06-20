@@ -64,7 +64,7 @@ export function Item({ index, setitem, items, dispatcher, state }) {
                 <td>
                     <input
                         type="text"
-                        placeholder="Item"
+                        placeholder="Item details"
                         className="input input-bordered w-full max-w-xs"
                         onChange={handleItem}
                     />
