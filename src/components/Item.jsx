@@ -9,7 +9,8 @@ const ACTIONS = {
     ADD_FIELD: "add-field",
 };
 export function Item({ index, setitem, items, dispatcher, state }) {
-    const [ rateInput ,setRate] = useState('');
+    const [rateInput, setRate] = useState("");
+    const [quan, setQuan] = useState("");
     function removeItem(e) {
         const indexId = parseInt(e.target.id, 10);
         indexId == 1
@@ -24,7 +25,7 @@ export function Item({ index, setitem, items, dispatcher, state }) {
     }
     function handleRate(e) {
         if (isValidDecimal(e.target.value)) {
-            setRate(e.target.value)
+            setRate(e.target.value);
             const rate = parseFloat(e.target.value);
             dispatcher({
                 type: ACTIONS.ADD_RATE,
@@ -33,15 +34,27 @@ export function Item({ index, setitem, items, dispatcher, state }) {
         }
     }
     function handleQuantity(e) {
-        const quantity = parseInt(e.target.value, 10);
-        dispatcher({
-            type: ACTIONS.ADD_QUANTITY,
-            payload: { index, quantity: quantity || 0 },
-        });
+        if (/^\d*$/.test(e.target.value)) {
+            setQuan(e.target.value);
+            const quantity = parseInt(e.target.value, 10);
+            dispatcher({
+                type: ACTIONS.ADD_QUANTITY,
+                payload: { index, quantity: quantity || 0 },
+            });
+        }
     }
     const isValidDecimal = (inputValue) => {
         return inputValue === "" || /^\d*\.?\d*$/.test(inputValue);
     };
+    function formatNumberToIndianSystem(number) {
+        if (number == null) {
+            return "";
+        }
+
+        const formattedNumber = number.toLocaleString("en-IN");
+
+        return formattedNumber;
+    }
     return (
         <>
             <tr key={index}>
@@ -67,20 +80,15 @@ export function Item({ index, setitem, items, dispatcher, state }) {
                 </td>
                 <td>
                     <input
-                        type="number"
+                        type="text"
                         placeholder="Quantity"
                         className="input input-bordered w-full max-w-xs"
+                        value={quan}
                         onChange={handleQuantity}
                     />
                 </td>
                 <td>
-                    <input
-                        type="text"
-                        placeholder="Price"
-                        className="input input-bordered w-full max-w-xs text-white"
-                        value={`\u20B9${state.items[index - 1]?.price || 0}`}
-                        disabled
-                    />
+                    <p className="mx-8">{`\u20B9${formatNumberToIndianSystem(state.items[index - 1]?.price || 0)}`}</p>
                 </td>
                 <td>
                     <button
