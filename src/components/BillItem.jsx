@@ -1,6 +1,4 @@
-import { GrandTotal } from "./GrandTotal";
 import { Item } from "./Item";
-import { useReducer, useState } from "react";
 
 export function BillItem({ items, dispatch, state, setItems }) {
     function addItem() {
