@@ -3,6 +3,8 @@ const ACTIONS = {
     ADD_RATE: "add-rate",
     ADD_QUANTITY: "add-quantity",
     GET_PRICE: "get-price",
+    REMOVE_ITEM: "remove-item",
+    ADD_FIELD:"add-field"
 };
 export function Item({ index, setitem, items, dispatcher, state }) {
     function removeItem(e) {
@@ -10,6 +12,8 @@ export function Item({ index, setitem, items, dispatcher, state }) {
         indexId == 1
             ? null
             : setitem(items.filter((_, index) => indexId - 1 != index));
+        const index = e.target.id;
+        dispatcher({ type: ACTIONS.REMOVE_ITEM, payload: { index } });
     }
     function handleItem(e) {
         const itemDesc = e.target.value;

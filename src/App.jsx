@@ -8,6 +8,8 @@ const ACTIONS = {
     ADD_RATE: "add-rate",
     ADD_QUANTITY: "add-quantity",
     GET_PRICE: "get-price",
+    REMOVE_ITEM:"remove-item",
+    ADD_FIELD:"add-field"
 };
 function App() {
     function reducer(state, action) {
@@ -31,6 +33,7 @@ function App() {
                                 ...item,
                                 rate: action.payload.rate,
                                 price: action.payload.rate * item.quantity,
+                                total: state.items.reduce((acc,curr)=> acc+curr.price)
                             }
                             : item,
                     ),
@@ -49,6 +52,11 @@ function App() {
                             : item,
                     ),
                 };
+
+            case ACTIONS.REMOVE_ITEM:
+                return {
+                    items: state.items.filter((_,i)=>i != action.payload.index-1)
+                }
             default:
                 return state;
         }
