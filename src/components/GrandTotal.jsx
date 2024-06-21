@@ -31,7 +31,7 @@ export function GrandTotal({ total }) {
     return (
         <>
             <div className="flex justify-around">
-                <div>
+                <div className="flex flex-col justify-center">
                     <div>
                         <label className="form-control">
                             <div className="label">
@@ -55,7 +55,7 @@ export function GrandTotal({ total }) {
                         </label>
                     </div>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 justify-center">
                     <div>
                         Sub Total: <span>{`\u20B9${sTotal}`}</span>
                     </div>

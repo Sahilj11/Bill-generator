@@ -8,7 +8,7 @@ export function BillItem({ items, dispatch, state, setItems }) {
     return (
         <>
             <div className="flex justify-center">
-                <table className="border-spacing-5 border-separate">
+                <table className="border-spacing-3 border-separate">
                     <thead>
                         <tr className="text-center">
                             <td>
