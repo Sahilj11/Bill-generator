@@ -1,10 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
-import { Charge } from "./Charge";
-const CHARGE_ACTION = {
-    CHANGE_CHARGE: "change-charge",
-    ADD_CHARGE: "add-charge",
-    CHANGE_HEAD: "change-head",
-};
+import { useState, useEffect  } from "react";
 export function GrandTotal({ total }) {
     const [sTotal, setSTotal] = useState(0);
     const [ftotal, setFtotal] = useState(0);
@@ -12,7 +6,7 @@ export function GrandTotal({ total }) {
         head: "Discount",
         rate: 0,
     });
-    
+    const [amtPaid, setAmtPaid] = useState(0);
     function discountManage(e) {
         const temp = { ...discountRate, rate: e.target.value };
         setDiscountRate(temp);
@@ -28,12 +22,12 @@ export function GrandTotal({ total }) {
             if (!isNaN(subTotal)) {
                 setSTotal(subTotal.toLocaleString("en-IN"));
                 const disPrice = (subTotal * discountRate.rate) / 100;
-                subTotal = subTotal - disPrice;
+                subTotal = subTotal - disPrice - amtPaid;
                 const finalTotal = subTotal.toLocaleString("en-IN");
                 setFtotal(finalTotal);
             }
         }
-    }, [sTotal, total, discountRate]);
+    }, [sTotal, total, discountRate, amtPaid]);
     return (
         <>
             <div className="flex justify-around">
@@ -83,14 +77,24 @@ export function GrandTotal({ total }) {
                         />
                     </div>
                     <div className="flex gap-3">
-                        <button className="btn btn-ghost text-blue-600 btn-sm">+ Add Tax</button>
-                        <button className="btn btn-ghost text-blue-600 btn-sm">+ Shipping</button>
+                        <button className="btn btn-ghost text-blue-600 btn-sm">
+                            + Add Tax
+                        </button>
+                        <button className="btn btn-ghost text-blue-600 btn-sm">
+                            + Shipping
+                        </button>
                     </div>
-        <div>
-        <span>Amount Paid: </span><input type="number" className="input" />
-        </div>
                     <div>
-                        Total: <span>{`\u20B9${ftotal}`}</span>
+                        <span>Amount Paid: </span>
+                        <input
+                            type="number"
+                            className="input"
+                            placeholder="0"
+                            onChange={(e) => setAmtPaid(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        Balance Due: <span>{`\u20B9${ftotal}`}</span>
                     </div>
                 </div>
             </div>

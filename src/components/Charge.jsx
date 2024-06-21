@@ -3,9 +3,6 @@ import { useState } from "react";
 export function Charge({
     placeholder,
     index,
-    dispatch,
-    consts,
-    state
 }) {
     const [symbol, setSym] = useState("%");
 
