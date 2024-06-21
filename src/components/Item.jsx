@@ -39,7 +39,7 @@ export function Item({ index, setitem, items, dispatcher, state }) {
             const quantity = parseInt(e.target.value, 10);
             dispatcher({
                 type: ACTIONS.ADD_QUANTITY,
-                payload: { index, quantity: quantity || 0 },
+                payload: { index, quantity: quantity || 1 },
             });
         }
     }

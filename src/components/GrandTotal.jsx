@@ -20,8 +20,14 @@ export function GrandTotal({ total }) {
     });
     const [amtPaid, setAmtPaid] = useState(0);
     function discountManage(e) {
-        const temp = { ...discountRate, rate: e.target.value };
-        setDiscountRate(temp);
+        const rate = e.target.value;
+        if (!isNaN(rate)) {
+            const temp = { ...discountRate, rate: rate };
+            setDiscountRate(temp);
+        } else {
+            const temp = { ...discountRate, rate: 0 };
+            setDiscountRate(temp);
+        }
     }
     function discountHead(e) {
         const temp = { ...discountRate, head: e.target.value };
@@ -31,11 +37,39 @@ export function GrandTotal({ total }) {
         if (total.items.length == 0) {
         } else {
             let subTotal = total.items.reduce((acc, curr) => acc + curr.price, 0);
-            if (!isNaN(subTotal)) {
-                setSTotal(subTotal.toLocaleString("en-IN"));
-                const disPrice = (subTotal * discountRate.rate) / 100;
-                subTotal = subTotal - disPrice - amtPaid;
-                const finalTotal = subTotal.toLocaleString("en-IN");
+            if (
+                !isNaN(subTotal) &&
+                subTotal !== null &&
+                subTotal !== undefined &&
+                !isNaN(discountRate.rate) &&
+                discountRate.rate !== null &&
+                discountRate.rate !== undefined
+            ) {
+                setSTotal(
+                    subTotal.toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }),
+                );
+
+                const disPrice = parseFloat(
+                    ((subTotal * discountRate.rate) / 100).toFixed(2),
+                );
+
+                let discountedTotal = parseFloat((subTotal - disPrice).toFixed(2));
+
+                const taxTemp = parseFloat(
+                    ((discountedTotal * taxRate.rate) / 100).toFixed(2),
+                );
+
+                const finalAmount = parseFloat(
+                    (discountedTotal + taxTemp + shippingRate.rate).toFixed(2),
+                );
+
+                const finalTotal = finalAmount.toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                });
                 setFtotal(finalTotal);
             }
         }
@@ -49,6 +83,7 @@ export function GrandTotal({ total }) {
         taxRate,
         shippingRate,
     ]);
+
     return (
         <>
             <div className="flex justify-around">
@@ -104,6 +139,7 @@ export function GrandTotal({ total }) {
                         <Shipping
                             show={setShipShow}
                             shipRate={shippingRate}
+                            setShipRateState={setShipRate}
                             setShipRate={setShipShow}
                         />
                     )}

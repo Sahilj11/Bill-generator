@@ -6,7 +6,17 @@ export function Tax({ show, taxRate, setTaxRate }) {
     }
     function handleRate(e) {
         const rate = parseInt(e.target.value, 10);
-        const temp = { ...taxRate, rate: rate };
+        if (!isNaN(rate)) {
+            const temp = { ...taxRate, rate: rate };
+            setTaxRate(temp);
+        } else {
+            const temp = { ...taxRate, rate: 0 };
+            setTaxRate(temp);
+        }
+    }
+    function removingTax() {
+        const temp = { ...taxRate, head: "Tax", rate: 0 };
+        show(false);
         setTaxRate(temp);
     }
     return (
@@ -27,7 +37,7 @@ export function Tax({ show, taxRate, setTaxRate }) {
                 />
                 <button
                     className="btn btn-sm btn-ghost text-red-700"
-                    onClick={() => show(false)}
+                    onClick={removingTax}
                 >
                     X
                 </button>

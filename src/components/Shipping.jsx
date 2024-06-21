@@ -1,11 +1,22 @@
-export function Shipping({ show, shipRate, setShipRate }) {
+export function Shipping({ show, shipRate, setShipRate, setShipRateState }) {
     function handleHead(e) {
         const temp = { ...shipRate, head: e.target.value };
         setShipRate(temp);
     }
     function handleRate(e) {
-        const temp = { ...shipRate, rate: parseInt(e.target.value, 10)};
-        setShipRate(temp);
+        const rate = parseInt(e.target.value, 10);
+        if (!isNaN(rate)) {
+            const temp = { ...shipRate, rate: rate };
+            setShipRateState(temp);
+        } else {
+            const temp = { ...shipRate, rate: 0 };
+            setShipRateState(temp);
+        }
+    }
+    function removingShipping() {
+        const temp = { ...shipRate, head: "Shipping", rate: 0 };
+        show(false);
+        setShipRateState(temp);
     }
     return (
         <>
@@ -24,7 +35,7 @@ export function Shipping({ show, shipRate, setShipRate }) {
                 />
                 <button
                     className="btn btn-sm btn-ghost text-red-700"
-                    onClick={() => show(false)}
+                    onClick={removingShipping}
                 >
                     X
                 </button>
