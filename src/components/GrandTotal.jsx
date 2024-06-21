@@ -8,9 +8,10 @@ const CHARGE_ACTION = {
 export function GrandTotal({ total }) {
     const [sTotal, setSTotal] = useState(0);
     const [ftotal, setFtotal] = useState(0);
-    const [charges, setCharges] = useState([{}]);
-    const [discountRate, setDiscountRate] = useState({ head: "Discount", rate: 0 });
-    const [tax, setTax] = useState({ head: "Tax", rate: 0 });
+    const [discountRate, setDiscountRate] = useState({
+        head: "Discount",
+        rate: 0,
+    });
     const [state, dispatch] = useReducer(reducer, {
         surc: [],
     });
@@ -23,10 +24,10 @@ export function GrandTotal({ total }) {
                 };
             case CHARGE_ACTION.CHANGE_HEAD:
                 return {
-                    surc:  [
-                        ...state.surc.slice(0, action.payload.index-1),
+                    surc: [
+                        ...state.surc.slice(0, action.payload.index - 1),
                         {
-                            ...state.surc[action.payload.index-1],
+                            ...state.surc[action.payload.index - 1],
                             head: action.payload.head,
                         },
                         ...state.surc.slice(action.payload.index),
@@ -42,16 +43,10 @@ export function GrandTotal({ total }) {
                             }
                             : item,
                     ),
-                }
+                };
             default:
                 return state;
         }
-    }
-    function addCharge() {
-        setCharges([...charges, {}]);
-        const newObject = { head: "Tax", rate: 0 };
-        console.log(state.surc);
-        dispatch({ type: CHARGE_ACTION.ADD_CHARGE, payload: { newObject } });
     }
     function discountManage(e) {
         const temp = { ...discountRate, rate: e.target.value };
@@ -69,13 +64,11 @@ export function GrandTotal({ total }) {
                 setSTotal(subTotal.toLocaleString("en-IN"));
                 const disPrice = (subTotal * discountRate.rate) / 100;
                 subTotal = subTotal - disPrice;
-                const taxPrice = (subTotal * tax.rate) / 100;
-                subTotal = subTotal + taxPrice;
-                const finalTotal = subTotal.toLocaleString("en-IN")
+                const finalTotal = subTotal.toLocaleString("en-IN");
                 setFtotal(finalTotal);
             }
         }
-    }, [sTotal, total, discountRate, tax]);
+    }, [sTotal, total, discountRate]);
     return (
         <>
             <div className="flex justify-around">
@@ -124,22 +117,10 @@ export function GrandTotal({ total }) {
                             className="input w-full max-w-xs pl-10"
                         />
                     </div>
-                    {charges.map((item, index) => {
-                        return (
-                            <Charge
-                                placeholder="Tax"
-                                setTax={setTax}
-                                tax={tax}
-                                index={index+1}
-                                dispatch={dispatch}
-                                consts={CHARGE_ACTION}
-                            state={state}
-                            />
-                        );
-                    })}
-                    <button className="btn btn-info w-2/3" onClick={addCharge}>
-                        Add more charges like shipping or more tax
-                    </button>
+                    <div className="flex gap-3">
+                        <button className="btn btn-ghost text-blue-600 btn-sm">+ Add Tax</button>
+                        <button className="btn btn-ghost text-blue-600 btn-sm">+ Shipping</button>
+                    </div>
                     <div>
                         Total: <span>{`\u20B9${ftotal}`}</span>
                     </div>

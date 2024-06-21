@@ -8,20 +8,6 @@ export function Charge({
     state
 }) {
     const [symbol, setSym] = useState("%");
-    const [rateValue, setRateValue] = useState(0);
-    const [headValue, setHeadValue] = useState("");
-    function handleHead(e) {
-        setHeadValue(e.target.value);
-        const index = parseInt(e.target.dataset.head, 10);
-        const head = e.target.value;
-        dispatch({ type: consts.CHANGE_HEAD, payload: { index, head } });
-    }
-    function handleRate(e) {
-        setRateValue(e.target.value);
-        const index = parseInt(e.target.dataset.rate, 10);
-        const rate = e.target.value;
-        dispatch({ type: consts.CHANGE_CHARGE, payload: { index, rate } });
-    }
 
     return (
         <>
