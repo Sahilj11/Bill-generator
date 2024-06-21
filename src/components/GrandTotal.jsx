@@ -43,7 +43,10 @@ export function GrandTotal({ total }) {
                 subTotal !== undefined &&
                 !isNaN(discountRate.rate) &&
                 discountRate.rate !== null &&
-                discountRate.rate !== undefined
+                discountRate.rate !== undefined &&
+                !isNaN(amtPaid) &&
+                amtPaid !== null &&
+                amtPaid !== undefined
             ) {
                 setSTotal(
                     subTotal.toLocaleString("en-IN", {
@@ -66,7 +69,8 @@ export function GrandTotal({ total }) {
                     (discountedTotal + taxTemp + shippingRate.rate).toFixed(2),
                 );
 
-                const finalTotal = finalAmount.toLocaleString("en-IN", {
+                const temp = finalAmount - amtPaid;
+                const finalTotal = temp.toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 });
