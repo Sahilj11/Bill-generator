@@ -6,10 +6,10 @@ const CHARGE_ACTION = {
     CHANGE_HEAD: "change-head",
 };
 export function GrandTotal({ total }) {
-    const [gtotal, setTotal] = useState(0);
+    const [sTotal, setSTotal] = useState(0);
     const [ftotal, setFtotal] = useState(0);
     const [charges, setCharges] = useState([{}]);
-    const [dis, setDis] = useState({ head: "Discount", rate: 0 });
+    const [discountRate, setDiscountRate] = useState({ head: "Discount", rate: 0 });
     const [tax, setTax] = useState({ head: "Tax", rate: 0 });
     const [state, dispatch] = useReducer(reducer, {
         surc: [],
@@ -54,28 +54,28 @@ export function GrandTotal({ total }) {
         dispatch({ type: CHARGE_ACTION.ADD_CHARGE, payload: { newObject } });
     }
     function discountManage(e) {
-        const temp = { ...dis, rate: e.target.value };
-        setDis(temp);
+        const temp = { ...discountRate, rate: e.target.value };
+        setDiscountRate(temp);
     }
     function discountHead(e) {
-        const temp = { ...dis, head: e.target.value };
-        setDis(temp);
+        const temp = { ...discountRate, head: e.target.value };
+        setDiscountRate(temp);
     }
     useEffect(() => {
         if (total.items.length == 0) {
         } else {
-            let to = total.items.reduce((acc, curr) => acc + curr.price, 0);
-            if (!isNaN(to)) {
-                setTotal(to.toLocaleString("en-IN"));
-                const temp = (to * dis.rate) / 100;
-                to = to - temp;
-                const temp2 = (to * tax.rate) / 100;
-                to = to + temp2;
-                to = to.toFixed(2);
-                setFtotal(to.toLocaleString("en-IN"));
+            let subTotal = total.items.reduce((acc, curr) => acc + curr.price, 0);
+            if (!isNaN(subTotal)) {
+                setSTotal(subTotal.toLocaleString("en-IN"));
+                const disPrice = (subTotal * discountRate.rate) / 100;
+                subTotal = subTotal - disPrice;
+                const taxPrice = (subTotal * tax.rate) / 100;
+                subTotal = subTotal + taxPrice;
+                const finalTotal = subTotal.toLocaleString("en-IN")
+                setFtotal(finalTotal);
             }
         }
-    }, [gtotal, total, dis, tax]);
+    }, [sTotal, total, discountRate, tax]);
     return (
         <>
             <div className="flex justify-around">
@@ -105,7 +105,7 @@ export function GrandTotal({ total }) {
                 </div>
                 <div className="flex flex-col gap-3">
                     <div>
-                        Sub Total: <span>{`\u20B9${gtotal}`}</span>
+                        Sub Total: <span>{`\u20B9${sTotal}`}</span>
                     </div>
                     <div className="flex relative">
                         <input
@@ -113,14 +113,14 @@ export function GrandTotal({ total }) {
                             placeholder="Discount"
                             className="input w-full max-w-xs pl-10"
                             onChange={discountHead}
-                            value={dis.head}
+                            value={discountRate.head}
                         />
                         <button className="absolute top-1/4 left-2">%</button>
                         <input
                             type="number"
                             placeholder="0"
                             onChange={discountManage}
-                            value={dis.rate}
+                            value={discountRate.rate}
                             className="input w-full max-w-xs pl-10"
                         />
                     </div>
@@ -148,7 +148,3 @@ export function GrandTotal({ total }) {
         </>
     );
 }
-// i want to keep track of all the taxes head and rate
-// there will be array of taxes
-// by default one size , user can add more
-// listner on change in valule of head and rate in each tax , using index to differ from each
