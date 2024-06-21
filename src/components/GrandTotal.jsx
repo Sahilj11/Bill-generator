@@ -10,6 +10,14 @@ export function GrandTotal({ total }) {
         head: "Discount",
         rate: 0,
     });
+    const [taxRate, setTaxRate] = useState({
+        head: "Tax",
+        rate: 0,
+    });
+    const [shippingRate, setShipRate] = useState({
+        head: "Shipping",
+        rate: 0,
+    });
     const [amtPaid, setAmtPaid] = useState(0);
     function discountManage(e) {
         const temp = { ...discountRate, rate: e.target.value };
@@ -31,7 +39,16 @@ export function GrandTotal({ total }) {
                 setFtotal(finalTotal);
             }
         }
-    }, [sTotal, total, discountRate, amtPaid]);
+    }, [
+        sTotal,
+        total,
+        discountRate,
+        amtPaid,
+        taxShow,
+        shipShow,
+        taxRate,
+        shippingRate,
+    ]);
     return (
         <>
             <div className="flex justify-around">
@@ -80,8 +97,16 @@ export function GrandTotal({ total }) {
                             className="input w-full max-w-xs"
                         />
                     </div>
-                    {taxShow && <Tax show={setTaxShow}/>}
-                    {shipShow && <Shipping show={setShipShow}/>}
+                    {taxShow && (
+                        <Tax show={setTaxShow} taxRate={taxRate} setTaxRate={setTaxRate} />
+                    )}
+                    {shipShow && (
+                        <Shipping
+                            show={setShipShow}
+                            shipRate={shippingRate}
+                            setShipRate={setShipShow}
+                        />
+                    )}
                     <div className="flex gap-3">
                         {!taxShow && (
                             <button
