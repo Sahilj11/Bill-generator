@@ -1,7 +1,11 @@
-import { useState, useEffect  } from "react";
+import { useState, useEffect } from "react";
+import { Tax } from "./Tax";
+import { Shipping } from "./Shipping";
 export function GrandTotal({ total }) {
     const [sTotal, setSTotal] = useState(0);
     const [ftotal, setFtotal] = useState(0);
+    const [taxShow, setTaxShow] = useState(false);
+    const [shipShow, setShipShow] = useState(false);
     const [discountRate, setDiscountRate] = useState({
         head: "Discount",
         rate: 0,
@@ -76,13 +80,25 @@ export function GrandTotal({ total }) {
                             className="input w-full max-w-xs"
                         />
                     </div>
+                    {taxShow && <Tax show={setTaxShow}/>}
+                    {shipShow && <Shipping show={setShipShow}/>}
                     <div className="flex gap-3">
-                        <button className="btn btn-ghost text-blue-600 btn-sm">
-                            + Add Tax
-                        </button>
-                        <button className="btn btn-ghost text-blue-600 btn-sm">
-                            + Shipping
-                        </button>
+                        {!taxShow && (
+                            <button
+                                className="btn btn-ghost text-blue-600 btn-sm"
+                                onClick={() => setTaxShow(true)}
+                            >
+                                + Add Tax
+                            </button>
+                        )}
+                        {!shipShow && (
+                            <button
+                                className="btn btn-ghost text-blue-600 btn-sm"
+                                onClick={() => setShipShow(true)}
+                            >
+                                + Shipping
+                            </button>
+                        )}
                     </div>
                     <div>
                         <span>Amount Paid: </span>
