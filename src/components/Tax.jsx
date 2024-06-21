@@ -15,7 +15,7 @@ export function Tax({ show, taxRate, setTaxRate }) {
         }
     }
     function removingTax() {
-        const temp = { ...taxRate, head: "Tax", rate: 0 };
+        const temp = { ...taxRate, head: "GST", rate: 0 };
         show(false);
         setTaxRate(temp);
     }
@@ -24,7 +24,7 @@ export function Tax({ show, taxRate, setTaxRate }) {
             <div className="flex relative items-center gap-2">
                 <input
                     type="text"
-                    placeholder="Tax"
+                    placeholder="GST"
                     className="input w-full max-w-xs pl-10"
                     onChange={handleHead}
                 />

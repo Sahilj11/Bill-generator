@@ -11,7 +11,7 @@ export function GrandTotal({ total }) {
         rate: 0,
     });
     const [taxRate, setTaxRate] = useState({
-        head: "Tax",
+        head: "GST",
         rate: 0,
     });
     const [shippingRate, setShipRate] = useState({
