@@ -12,42 +12,7 @@ export function GrandTotal({ total }) {
         head: "Discount",
         rate: 0,
     });
-    const [state, dispatch] = useReducer(reducer, {
-        surc: [],
-    });
-
-    function reducer(state, action) {
-        switch (action.type) {
-            case CHARGE_ACTION.ADD_CHARGE:
-                return {
-                    surc: [...state.surc, action.payload.newObject],
-                };
-            case CHARGE_ACTION.CHANGE_HEAD:
-                return {
-                    surc: [
-                        ...state.surc.slice(0, action.payload.index - 1),
-                        {
-                            ...state.surc[action.payload.index - 1],
-                            head: action.payload.head,
-                        },
-                        ...state.surc.slice(action.payload.index),
-                    ],
-                };
-            case CHARGE_ACTION.CHANGE_CHARGE:
-                return {
-                    surc: state.surc.map((item, index) =>
-                        index === action.payload.index - 1
-                            ? {
-                                ...item,
-                                rate: action.payload.rate,
-                            }
-                            : item,
-                    ),
-                };
-            default:
-                return state;
-        }
-    }
+    
     function discountManage(e) {
         const temp = { ...discountRate, rate: e.target.value };
         setDiscountRate(temp);
@@ -114,13 +79,16 @@ export function GrandTotal({ total }) {
                             placeholder="0"
                             onChange={discountManage}
                             value={discountRate.rate}
-                            className="input w-full max-w-xs pl-10"
+                            className="input w-full max-w-xs"
                         />
                     </div>
                     <div className="flex gap-3">
                         <button className="btn btn-ghost text-blue-600 btn-sm">+ Add Tax</button>
                         <button className="btn btn-ghost text-blue-600 btn-sm">+ Shipping</button>
                     </div>
+        <div>
+        <span>Amount Paid: </span><input type="number" className="input" />
+        </div>
                     <div>
                         Total: <span>{`\u20B9${ftotal}`}</span>
                     </div>

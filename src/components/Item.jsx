@@ -93,7 +93,7 @@ export function Item({ index, setitem, items, dispatcher, state }) {
                 <td>
                     <button
                         onClick={removeItem}
-                        className="btn btn-info"
+                        className="btn btn-info btn-sm"
                         id={index}
                         disabled={index == 1}
                     >
